@@ -1,0 +1,14 @@
+{
+    "ItemPipes:PipeConnection": {
+        sides: ["TOP","LEFT","RIGHT","FRONT","BOTTOM","BACK"]
+    },
+    "Inventory": {
+        "privateToOwner": false,
+        "itemSlots": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    "InteractionTarget": {},
+    "InteractionScreen": {
+        "screen": "AdditionalItemPipes:sorterScreen"
+    },
+    "AdditionalItemPipes:Sorter": {}
+}

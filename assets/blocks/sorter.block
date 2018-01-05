@@ -1,0 +1,14 @@
+{
+    "tiles": {
+        "top": "AdditionalItemPipes:sorter-top",
+        "front": "AdditionalItemPipes:sorter-front",
+        "right": "AdditionalItemPipes:sorter-right",
+        "back": "AdditionalItemPipes:sorter-back",
+        "left": "AdditionalItemPipes:sorter-left",
+        "bottom": "AdditionalItemPipes:sorter-bottom"
+    },
+    "entity": {
+        "prefab": "AdditionalItemPipes:sorter",
+        "keepActive": true
+    }
+}
