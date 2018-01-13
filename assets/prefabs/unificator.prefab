@@ -1,0 +1,6 @@
+{
+    "ItemPipes:PipeConnection": {
+        sides: ["TOP","LEFT","RIGHT","FRONT","BOTTOM","BACK"]
+    },
+    "AdditionalItemPipes:Unificator": {}
+}
