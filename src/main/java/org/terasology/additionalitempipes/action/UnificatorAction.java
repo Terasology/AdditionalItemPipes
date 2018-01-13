@@ -15,8 +15,6 @@
  */
 package org.terasology.additionalitempipes.action;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.additionalitempipes.components.UnificatorComponent;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
@@ -31,7 +29,6 @@ import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.common.lifespan.LifespanComponent;
 import org.terasology.logic.inventory.PickupComponent;
 import org.terasology.math.Side;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.physics.components.RigidBodyComponent;
 import org.terasology.registry.In;
@@ -45,7 +42,6 @@ import java.util.Set;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class UnificatorAction extends BaseComponentSystem {
-    private static final Logger logger = LoggerFactory.getLogger(UnificatorAction.class);
     private Side outputside;
     @In
     private BlockManager blockManager;
@@ -57,52 +53,42 @@ public class UnificatorAction extends BaseComponentSystem {
     UnificatorComponent unificatorComponent;
 
     @ReceiveEvent(components = {UnificatorComponent.class})
-    public void detectSide(ActivateEvent event) {
+    public void detectSide(ActivateEvent event, EntityRef itemEntity) {
         if (!event.getTarget().exists()) {
             event.consume();
-            logger.info("1");
             return;
         }
-        Vector3f posf = event.getHitPosition();
-        Vector3i posi = new Vector3i(posf);
+        Vector3i posi = event.getTarget().getComponent(BlockComponent.class).getPosition();
         Side side = Side.inDirection(event.getHitNormal());
-        EntityRef entity = event.getTarget();
-        logger.info("2");
 
         switch (side) {
             case TOP:
                 outputside = Side.TOP;
-                entity.destroy();
                 Block top = blockManager.getBlock("AdditionalItemPipes:unificatortop");
                 world.setBlock(posi, top);
                 break;
             case FRONT:
                 outputside = Side.FRONT;
-                entity.destroy();
                 Block front = blockManager.getBlock("AdditionalItemPipes:unificatorfront");
                 world.setBlock(posi, front);
                 break;
             case RIGHT:
                 outputside = Side.RIGHT;
-                entity.destroy();
                 Block right = blockManager.getBlock("AdditionalItemPipes:unificatorright");
                 world.setBlock(posi, right);
                 break;
             case BACK:
                 outputside = Side.BACK;
-                entity.destroy();
                 Block back = blockManager.getBlock("AdditionalItemPipes:unificatorback");
                 world.setBlock(posi, back);
                 break;
             case LEFT:
                 outputside = Side.LEFT;
-                entity.destroy();
                 Block left = blockManager.getBlock("AdditionalItemPipes:unificatorleft");
                 world.setBlock(posi, left);
                 break;
             case BOTTOM:
                 outputside = Side.BOTTOM;
-                entity.destroy();
                 Block bottom = blockManager.getBlock("AdditionalItemPipes:unificatorbottom");
                 world.setBlock(posi, bottom);
                 break;
@@ -112,11 +98,9 @@ public class UnificatorAction extends BaseComponentSystem {
     @ReceiveEvent(components = UnificatorComponent.class, priority = EventPriority.PRIORITY_HIGH)
     public void onItemInput(PipeInsertEvent event, EntityRef entity, UnificatorComponent unificator, BlockComponent block) {
         EntityRef item = event.getActor();
-
         item.removeComponent(RigidBodyComponent.class);
         item.removeComponent(LifespanComponent.class);
         item.removeComponent(PickupComponent.class);
-
         Vector3i position = block.getPosition();
         if(outputside != null) {
             int num = 0;
@@ -125,19 +109,19 @@ public class UnificatorAction extends BaseComponentSystem {
                     num=0;
                     break;
                 case FRONT:
-                    num=1;
-                    break;
-                case RIGHT:
-                    num=2;
-                    break;
-                case BACK:
-                    num=3;
-                    break;
-                case LEFT:
                     num=4;
                     break;
-                case BOTTOM:
+                case RIGHT:
+                    num=3;
+                    break;
+                case BACK:
                     num=5;
+                    break;
+                case LEFT:
+                    num=2;
+                    break;
+                case BOTTOM:
+                    num=1;
                     break;
             }
             inputOrDrop(event.getActor(), position, Side.values()[num]);
