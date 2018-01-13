@@ -1,0 +1,14 @@
+{
+    "tiles": {
+        "top": "AdditionalItemPipes:orange",
+        "front": "AdditionalItemPipes:orange",
+        "right": "AdditionalItemPipes:red",
+        "back": "AdditionalItemPipes:orange",
+        "left": "AdditionalItemPipes:orange",
+        "bottom": "AdditionalItemPipes:orange"
+    },
+    "entity": {
+        "prefab": "AdditionalItemPipes:unificator",
+        "keepActive": true
+    }
+}
