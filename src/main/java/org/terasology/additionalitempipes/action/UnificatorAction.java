@@ -42,53 +42,46 @@ import java.util.Set;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class UnificatorAction extends BaseComponentSystem {
-    private Side outputside;
     @In
     private BlockManager blockManager;
     @In
     PipeSystem pipeSystem;
     @In
     private WorldProvider world;
-    @In
-    UnificatorComponent unificatorComponent;
 
     @ReceiveEvent(components = {UnificatorComponent.class})
     public void detectSide(ActivateEvent event, EntityRef itemEntity) {
+        UnificatorComponent unificatorComponent = itemEntity.getComponent(UnificatorComponent.class);
         if (!event.getTarget().exists()) {
             event.consume();
             return;
         }
         Vector3i posi = event.getTarget().getComponent(BlockComponent.class).getPosition();
         Side side = Side.inDirection(event.getHitNormal());
+        unificatorComponent.outputside=side;
 
         switch (side) {
             case TOP:
-                outputside = Side.TOP;
                 Block top = blockManager.getBlock("AdditionalItemPipes:unificatortop");
                 world.setBlock(posi, top);
                 break;
             case FRONT:
-                outputside = Side.FRONT;
                 Block front = blockManager.getBlock("AdditionalItemPipes:unificatorfront");
                 world.setBlock(posi, front);
                 break;
             case RIGHT:
-                outputside = Side.RIGHT;
                 Block right = blockManager.getBlock("AdditionalItemPipes:unificatorright");
                 world.setBlock(posi, right);
                 break;
             case BACK:
-                outputside = Side.BACK;
                 Block back = blockManager.getBlock("AdditionalItemPipes:unificatorback");
                 world.setBlock(posi, back);
                 break;
             case LEFT:
-                outputside = Side.LEFT;
                 Block left = blockManager.getBlock("AdditionalItemPipes:unificatorleft");
                 world.setBlock(posi, left);
                 break;
             case BOTTOM:
-                outputside = Side.BOTTOM;
                 Block bottom = blockManager.getBlock("AdditionalItemPipes:unificatorbottom");
                 world.setBlock(posi, bottom);
                 break;
@@ -96,37 +89,15 @@ public class UnificatorAction extends BaseComponentSystem {
     }
 
     @ReceiveEvent(components = UnificatorComponent.class, priority = EventPriority.PRIORITY_HIGH)
-    public void onItemInput(PipeInsertEvent event, EntityRef entity, UnificatorComponent unificator, BlockComponent block) {
+    public void onItemInput(PipeInsertEvent event, EntityRef entity, BlockComponent block) {
+        UnificatorComponent unificatorComponent = entity.getComponent(UnificatorComponent.class);
         EntityRef item = event.getActor();
         item.removeComponent(RigidBodyComponent.class);
         item.removeComponent(LifespanComponent.class);
         item.removeComponent(PickupComponent.class);
         Vector3i position = block.getPosition();
-        if(outputside != null) {
-            int num = 0;
-            switch(outputside){
-                case TOP:
-                    num=0;
-                    break;
-                case FRONT:
-                    num=4;
-                    break;
-                case RIGHT:
-                    num=3;
-                    break;
-                case BACK:
-                    num=5;
-                    break;
-                case LEFT:
-                    num=2;
-                    break;
-                case BOTTOM:
-                    num=1;
-                    break;
-            }
-            inputOrDrop(event.getActor(), position, Side.values()[num]);
-            event.consume();
-        }
+        inputOrDrop(event.getActor(), position, unificatorComponent.outputside);
+        event.consume();
     }
 
     private void inputOrDrop(EntityRef item, Vector3i position, Side side) {

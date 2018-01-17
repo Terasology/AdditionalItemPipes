@@ -16,6 +16,8 @@
 package org.terasology.additionalitempipes.components;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.math.Side;
 
 public class UnificatorComponent implements Component {
+    public Side outputside;
 }
