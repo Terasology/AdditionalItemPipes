@@ -50,15 +50,15 @@ public class UnificatorAction extends BaseComponentSystem {
     private WorldProvider world;
 
     @ReceiveEvent(components = {UnificatorComponent.class})
-    public void detectSide(ActivateEvent event, EntityRef itemEntity) {
-        UnificatorComponent unificatorComponent = itemEntity.getComponent(UnificatorComponent.class);
+    public void detectSide(ActivateEvent event, EntityRef itemEntity, UnificatorComponent unificator) {
         if (!event.getTarget().exists()) {
             event.consume();
             return;
         }
         Vector3i posi = event.getTarget().getComponent(BlockComponent.class).getPosition();
         Side side = Side.inDirection(event.getHitNormal());
-        unificatorComponent.outputside=side;
+
+        unificator.outputside=side;
 
         switch (side) {
             case TOP:
@@ -89,19 +89,19 @@ public class UnificatorAction extends BaseComponentSystem {
     }
 
     @ReceiveEvent(components = UnificatorComponent.class, priority = EventPriority.PRIORITY_HIGH)
-    public void onItemInput(PipeInsertEvent event, EntityRef entity, BlockComponent block) {
-        UnificatorComponent unificatorComponent = entity.getComponent(UnificatorComponent.class);
+    public void onItemInput(PipeInsertEvent event, EntityRef entity, UnificatorComponent unificator, BlockComponent block) {
+        Side side=unificator.outputside;
         EntityRef item = event.getActor();
         item.removeComponent(RigidBodyComponent.class);
         item.removeComponent(LifespanComponent.class);
         item.removeComponent(PickupComponent.class);
         Vector3i position = block.getPosition();
-        inputOrDrop(event.getActor(), position, unificatorComponent.outputside);
+        inputOrDrop(event.getActor(), position, side);
         event.consume();
     }
 
-    private void inputOrDrop(EntityRef item, Vector3i position, Side side) {
-        Map<Side, EntityRef> pipes = pipeSystem.findPipes(position);
+    private void inputOrDrop(EntityRef item, Vector3i sorterPos, Side side) {
+        Map<Side, EntityRef> pipes = pipeSystem.findPipes(sorterPos);
         EntityRef pipe = pipes.get(side);
         if (pipe != null) {
             Set<Prefab> prefabs = pipeSystem.findingMatchingPathPrefab(pipe, side.reverse());
