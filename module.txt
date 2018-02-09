@@ -1,20 +1,12 @@
 {
     "id" : "AdditionalItemPipes",
-    "version" : "0.1.0-SNAPSHOT",
+    "version" : "0.1.1-SNAPSHOT",
     "author" : "",
     "displayName" : "AdditionalItemPipes",
     "description" : "",
     "dependencies" : [
-        {
-            "id": "Core",
-            "minVersion": "1.0.0"
-        },
-        {
-            "id" : "ItemPipes",
-            "minVersion": "0.1.0"
-
-        }
-
+        {"id": "Core", "minVersion": "2.0.0"},
+        {"id" : "ItemPipes", "minVersion": "0.1.0"}
     ],
     "serverSideOnly" : false
 }
