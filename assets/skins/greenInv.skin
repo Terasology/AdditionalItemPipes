@@ -1,5 +1,5 @@
 {
-    "inherit": "Core:inventoryDefault",
+    "inherit": "inventory:inventoryDefault",
     "elements": {
         "InventoryCell": {
             "background": "AdditionalItemPipes:greenBox"
