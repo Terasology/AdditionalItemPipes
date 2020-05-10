@@ -1,12 +1,14 @@
 {
-    "id" : "AdditionalItemPipes",
-    "version" : "0.2.0",
-    "author" : "",
-    "displayName" : "AdditionalItemPipes",
-    "description" : "",
-    "dependencies" : [
-        {"id" : "ItemPipes", "minVersion": "0.1.0"}
+    "id": "AdditionalItemPipes",
+    "version": "1.0.0",
+    "author": "The Terasology Foundation",
+    "displayName": "AdditionalItemPipes",
+    "description": "This module adds both logic and assets for item pipes",
+    "dependencies": [
+        { "id": "Inventory", "minVersion": "1.1.0" },
+        { "id": "ItemPipes", "minVersion": "0.1.0" }
     ],
-    "serverSideOnly" : false,
-    "isAsset": true
+    "serverSideOnly": false,
+    "isAsset": true,
+    "isLibrary": true
 }
