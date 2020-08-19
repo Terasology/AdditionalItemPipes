@@ -1,3 +1,6 @@
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
+
 package org.terasology.additionalitempipes.ui;
 
 import org.terasology.additionalitempipes.components.SorterComponent;
@@ -6,11 +9,11 @@ import org.terasology.logic.characters.CharacterComponent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
-import org.terasology.rendering.nui.UIWidget;
-import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
+import org.terasology.nui.UIWidget;
+import org.terasology.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.layers.ingame.inventory.InventoryGrid;
-import org.terasology.rendering.nui.widgets.ActivateEventListener;
-import org.terasology.rendering.nui.widgets.UICheckbox;
+import org.terasology.nui.widgets.ActivateEventListener;
+import org.terasology.nui.widgets.UICheckbox;
 
 import java.util.LinkedList;
 
