@@ -1,5 +1,6 @@
 package org.terasology.additionalitempipes.action;
 
+import org.joml.Vector3i;
 import org.terasology.additionalitempipes.components.SorterComponent;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
@@ -14,8 +15,8 @@ import org.terasology.logic.common.lifespan.LifespanComponent;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.PickupComponent;
 import org.terasology.logic.inventory.events.InventorySlotChangedEvent;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.Side;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.physics.components.RigidBodyComponent;
 import org.terasology.registry.In;
 import org.terasology.world.block.BlockComponent;
@@ -39,6 +40,7 @@ public class SorterAction extends BaseComponentSystem {
 
     /**
      * Called when an item is input to the Sorter by pipe.
+     *
      * @param event PipeInsertEvent called by {@link org.terasology.itempipes.controllers.BlockMotionSystem}.
      * @param entity EntityRef to the Sorter.
      * @param sorter Sorter's SorterComponent.
@@ -52,7 +54,7 @@ public class SorterAction extends BaseComponentSystem {
         item.removeComponent(LifespanComponent.class);
         item.removeComponent(PickupComponent.class);
 
-        Vector3i sorterPos = block.getPosition();
+        Vector3i sorterPos = JomlUtil.from(block.position);
 
         //look for the item in the filter - if found, send the item to side according to the filter, if not - to default side set by a checkbox.
         int sideNum = 0;
@@ -73,7 +75,9 @@ public class SorterAction extends BaseComponentSystem {
     }
 
     /**
-     * Handles the item which came to the Sorter. Inserts the item into the according pipe, if available, otherwise - drops it.
+     * Handles the item which came to the Sorter. Inserts the item into the according pipe, if available, otherwise -
+     * drops it.
+     *
      * @param item the item which came to the Sorter.
      * @param sorterPos position of the Sorter.
      * @param side side to which a pipe is connected.
@@ -84,8 +88,10 @@ public class SorterAction extends BaseComponentSystem {
         if (pipe != null) {
             Set<Prefab> prefabs = pipeSystem.findingMatchingPathPrefab(pipe, side.reverse());
             Optional<Prefab> pick = prefabs.stream().skip((int) (prefabs.size() * Math.random())).findFirst();
-            if (pipeSystem.insertIntoPipe(item, pipe, side.reverse(), pick.get(), 1f)) {
-                return;
+            if (pick.isPresent()) {
+                if (pipeSystem.insertIntoPipe(item, pipe, side.reverse(), pick.get(), 1f)) {
+                    return;
+                }
             }
         }
         pipeSystem.dropItem(item);
@@ -93,6 +99,7 @@ public class SorterAction extends BaseComponentSystem {
 
     /**
      * Called when an item is added/removed into the Sorter's inventory - filter base.
+     *
      * @param event Event triggered when items are added/removed
      * @param entity EntityRef to the Sorter.
      * @param sortComp SorterComponent of the Sorter.
@@ -122,7 +129,9 @@ public class SorterAction extends BaseComponentSystem {
     }
 
     /**
-     * Gets a string off the entity used for filtering. The items are differentiated by their's prefab name, block - by their block family's name.
+     * Gets a string off the entity used for filtering. The items are differentiated by their's prefab name, block - by
+     * their block family's name.
+     *
      * @param item Item used to generate the string for filtering purposes.
      * @return String generated for filtering purposes.
      */

@@ -15,6 +15,7 @@
  */
 package org.terasology.additionalitempipes.action;
 
+import org.joml.Vector3i;
 import org.terasology.additionalitempipes.components.UnificatorComponent;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
@@ -28,8 +29,8 @@ import org.terasology.itempipes.event.PipeInsertEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.common.lifespan.LifespanComponent;
 import org.terasology.logic.inventory.PickupComponent;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.Side;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.physics.components.RigidBodyComponent;
 import org.terasology.registry.In;
 import org.terasology.world.WorldProvider;
@@ -58,7 +59,7 @@ public class UnificatorAction extends BaseComponentSystem {
             event.consume();
             return;
         }
-        Vector3i posi = event.getTarget().getComponent(BlockComponent.class).getPosition();
+        Vector3i posi = JomlUtil.from(event.getTarget().getComponent(BlockComponent.class).position);
         Side side = Side.inDirection(event.getHitNormal());
 
         switch (side) {
@@ -101,27 +102,27 @@ public class UnificatorAction extends BaseComponentSystem {
         item.removeComponent(RigidBodyComponent.class);
         item.removeComponent(LifespanComponent.class);
         item.removeComponent(PickupComponent.class);
-        Vector3i position = block.getPosition();
-        if(outputside != null) {
+        Vector3i position = JomlUtil.from(block.position);
+        if (outputside != null) {
             int num = 0;
-            switch(outputside){
+            switch (outputside) {
                 case TOP:
-                    num=0;
+                    num = 0;
                     break;
                 case FRONT:
-                    num=4;
+                    num = 4;
                     break;
                 case RIGHT:
-                    num=3;
+                    num = 3;
                     break;
                 case BACK:
-                    num=5;
+                    num = 5;
                     break;
                 case LEFT:
-                    num=2;
+                    num = 2;
                     break;
                 case BOTTOM:
-                    num=1;
+                    num = 1;
                     break;
             }
             inputOrDrop(event.getActor(), position, Side.values()[num]);
