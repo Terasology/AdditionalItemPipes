@@ -1,25 +1,28 @@
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
+
 package org.terasology.additionalitempipes.action;
 
 import org.terasology.additionalitempipes.components.SorterComponent;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.EventPriority;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.common.lifespan.LifespanComponent;
+import org.terasology.engine.logic.inventory.PickupComponent;
+import org.terasology.engine.math.Side;
+import org.terasology.engine.physics.components.RigidBodyComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.world.block.BlockComponent;
+import org.terasology.engine.world.block.items.BlockItemComponent;
+import org.terasology.inventory.logic.InventoryComponent;
+import org.terasology.inventory.logic.events.InventorySlotChangedEvent;
 import org.terasology.itempipes.controllers.PipeSystem;
 import org.terasology.itempipes.event.PipeInsertEvent;
-import org.terasology.logic.common.lifespan.LifespanComponent;
-import org.terasology.logic.inventory.InventoryComponent;
-import org.terasology.logic.inventory.PickupComponent;
-import org.terasology.logic.inventory.events.InventorySlotChangedEvent;
-import org.terasology.math.Side;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.physics.components.RigidBodyComponent;
-import org.terasology.registry.In;
-import org.terasology.world.block.BlockComponent;
-import org.terasology.world.block.items.BlockItemComponent;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -39,6 +42,7 @@ public class SorterAction extends BaseComponentSystem {
 
     /**
      * Called when an item is input to the Sorter by pipe.
+     *
      * @param event PipeInsertEvent called by {@link org.terasology.itempipes.controllers.BlockMotionSystem}.
      * @param entity EntityRef to the Sorter.
      * @param sorter Sorter's SorterComponent.
@@ -54,7 +58,8 @@ public class SorterAction extends BaseComponentSystem {
 
         Vector3i sorterPos = block.getPosition();
 
-        //look for the item in the filter - if found, send the item to side according to the filter, if not - to default side set by a checkbox.
+        //look for the item in the filter - if found, send the item to side according to the filter, if not - to 
+        // default side set by a checkbox.
         int sideNum = 0;
         for (List<String> list : sorter.filter) {
             for (String compareString : list) {
@@ -73,7 +78,9 @@ public class SorterAction extends BaseComponentSystem {
     }
 
     /**
-     * Handles the item which came to the Sorter. Inserts the item into the according pipe, if available, otherwise - drops it.
+     * Handles the item which came to the Sorter. Inserts the item into the according pipe, if available, otherwise -
+     * drops it.
+     *
      * @param item the item which came to the Sorter.
      * @param sorterPos position of the Sorter.
      * @param side side to which a pipe is connected.
@@ -93,13 +100,15 @@ public class SorterAction extends BaseComponentSystem {
 
     /**
      * Called when an item is added/removed into the Sorter's inventory - filter base.
+     *
      * @param event Event triggered when items are added/removed
      * @param entity EntityRef to the Sorter.
      * @param sortComp SorterComponent of the Sorter.
      * @param inv InventoryComponent of the Sorter.
      */
     @ReceiveEvent(components = {SorterComponent.class, InventoryComponent.class})
-    public void onFilterChange(InventorySlotChangedEvent event, EntityRef entity, SorterComponent sortComp, InventoryComponent inv) {
+    public void onFilterChange(InventorySlotChangedEvent event, EntityRef entity, SorterComponent sortComp,
+                               InventoryComponent inv) {
         List<List<String>> newFilter = new LinkedList<>();
         newFilter.add(new ArrayList<>());
         newFilter.add(new ArrayList<>());
@@ -122,7 +131,9 @@ public class SorterAction extends BaseComponentSystem {
     }
 
     /**
-     * Gets a string off the entity used for filtering. The items are differentiated by their's prefab name, block - by their block family's name.
+     * Gets a string off the entity used for filtering. The items are differentiated by their's prefab name, block - by
+     * their block family's name.
+     *
      * @param item Item used to generate the string for filtering purposes.
      * @return String generated for filtering purposes.
      */

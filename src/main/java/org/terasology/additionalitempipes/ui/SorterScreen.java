@@ -4,29 +4,29 @@
 package org.terasology.additionalitempipes.ui;
 
 import org.terasology.additionalitempipes.components.SorterComponent;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.logic.characters.CharacterComponent;
-import org.terasology.logic.players.LocalPlayer;
-import org.terasology.registry.In;
-import org.terasology.rendering.nui.CoreScreenLayer;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.logic.characters.CharacterComponent;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.nui.CoreScreenLayer;
+import org.terasology.inventory.rendering.nui.layers.ingame.InventoryGrid;
 import org.terasology.nui.UIWidget;
 import org.terasology.nui.databinding.ReadOnlyBinding;
-import org.terasology.rendering.nui.layers.ingame.inventory.InventoryGrid;
 import org.terasology.nui.widgets.ActivateEventListener;
 import org.terasology.nui.widgets.UICheckbox;
 
 import java.util.LinkedList;
 
 /**
- * Screen for Sorter. This class makes Sorter's screen "entity-aware" and lets user select the Sorter's side for not defined items in the filter.
+ * Screen for Sorter. This class makes Sorter's screen "entity-aware" and lets user select the Sorter's side for not
+ * defined items in the filter.
  */
 public class SorterScreen extends CoreScreenLayer {
 
+    private final LinkedList<InventoryGrid> inventories = new LinkedList<>();
+    private final LinkedList<UICheckbox> checkboxes = new LinkedList<>();
     @In
     private LocalPlayer localPlayer;
-
-    private LinkedList<InventoryGrid> inventories = new LinkedList<>();
-    private LinkedList<UICheckbox> checkboxes = new LinkedList<>();
 
     @Override
     public void initialise() {
@@ -64,11 +64,12 @@ public class SorterScreen extends CoreScreenLayer {
         checkboxes.add(find("blueBox", UICheckbox.class));
         checkboxes.add(find("pinkBox", UICheckbox.class));
 
-        //this listener sets activated checkbox to true, other to false and sets Sorter's default side number to activated checkboxes' index.
+        //this listener sets activated checkbox to true, other to false and sets Sorter's default side number to 
+        // activated checkboxes' index.
         ActivateEventListener boxListener = new ActivateEventListener() {
             @Override
             public void onActivated(UIWidget widget) {
-                UICheckbox activatedBox = (UICheckbox)widget;
+                UICheckbox activatedBox = (UICheckbox) widget;
                 activatedBox.setChecked(true);
 
                 LinkedList<UICheckbox> otherBoxes = new LinkedList<>(checkboxes);

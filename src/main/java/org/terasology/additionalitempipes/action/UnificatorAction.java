@@ -1,56 +1,44 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.additionalitempipes.action;
 
 import org.terasology.additionalitempipes.components.UnificatorComponent;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.EventPriority;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.common.ActivateEvent;
+import org.terasology.engine.logic.common.lifespan.LifespanComponent;
+import org.terasology.engine.logic.inventory.PickupComponent;
+import org.terasology.engine.math.Side;
+import org.terasology.engine.physics.components.RigidBodyComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.world.WorldProvider;
+import org.terasology.engine.world.block.Block;
+import org.terasology.engine.world.block.BlockComponent;
+import org.terasology.engine.world.block.BlockManager;
 import org.terasology.itempipes.controllers.PipeSystem;
 import org.terasology.itempipes.event.PipeInsertEvent;
-import org.terasology.logic.common.ActivateEvent;
-import org.terasology.logic.common.lifespan.LifespanComponent;
-import org.terasology.logic.inventory.PickupComponent;
-import org.terasology.math.Side;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.physics.components.RigidBodyComponent;
-import org.terasology.registry.In;
-import org.terasology.world.WorldProvider;
-import org.terasology.world.block.Block;
-import org.terasology.world.block.BlockComponent;
-import org.terasology.world.block.BlockManager;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class UnificatorAction extends BaseComponentSystem {
+    @In
+    PipeSystem pipeSystem;
+    @In
+    UnificatorComponent unificatorComponent;
     private Side outputside;
     @In
     private BlockManager blockManager;
     @In
-    PipeSystem pipeSystem;
-    @In
     private WorldProvider world;
-    @In
-    UnificatorComponent unificatorComponent;
 
     @ReceiveEvent(components = {UnificatorComponent.class})
     public void detectSide(ActivateEvent event, EntityRef itemEntity) {
@@ -96,32 +84,33 @@ public class UnificatorAction extends BaseComponentSystem {
     }
 
     @ReceiveEvent(components = UnificatorComponent.class, priority = EventPriority.PRIORITY_HIGH)
-    public void onItemInput(PipeInsertEvent event, EntityRef entity, UnificatorComponent unificator, BlockComponent block) {
+    public void onItemInput(PipeInsertEvent event, EntityRef entity, UnificatorComponent unificator,
+                            BlockComponent block) {
         EntityRef item = event.getActor();
         item.removeComponent(RigidBodyComponent.class);
         item.removeComponent(LifespanComponent.class);
         item.removeComponent(PickupComponent.class);
         Vector3i position = block.getPosition();
-        if(outputside != null) {
+        if (outputside != null) {
             int num = 0;
-            switch(outputside){
+            switch (outputside) {
                 case TOP:
-                    num=0;
+                    num = 0;
                     break;
                 case FRONT:
-                    num=4;
+                    num = 4;
                     break;
                 case RIGHT:
-                    num=3;
+                    num = 3;
                     break;
                 case BACK:
-                    num=5;
+                    num = 5;
                     break;
                 case LEFT:
-                    num=2;
+                    num = 2;
                     break;
                 case BOTTOM:
-                    num=1;
+                    num = 1;
                     break;
             }
             inputOrDrop(event.getActor(), position, Side.values()[num]);
