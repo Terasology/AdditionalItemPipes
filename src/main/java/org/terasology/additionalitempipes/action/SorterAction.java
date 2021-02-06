@@ -1,6 +1,9 @@
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
+
 package org.terasology.additionalitempipes.action;
 
-import org.joml.Vector3i;
+import org.joml.Vector3ic;
 import org.terasology.additionalitempipes.components.SorterComponent;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
@@ -15,7 +18,6 @@ import org.terasology.logic.common.lifespan.LifespanComponent;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.PickupComponent;
 import org.terasology.logic.inventory.events.InventorySlotChangedEvent;
-import org.terasology.math.JomlUtil;
 import org.terasology.math.Side;
 import org.terasology.physics.components.RigidBodyComponent;
 import org.terasology.registry.In;
@@ -54,7 +56,7 @@ public class SorterAction extends BaseComponentSystem {
         item.removeComponent(LifespanComponent.class);
         item.removeComponent(PickupComponent.class);
 
-        Vector3i sorterPos = JomlUtil.from(block.position);
+        Vector3ic sorterPos = block.getPosition();
 
         //look for the item in the filter - if found, send the item to side according to the filter, if not - to default side set by a checkbox.
         int sideNum = 0;
@@ -82,7 +84,7 @@ public class SorterAction extends BaseComponentSystem {
      * @param sorterPos position of the Sorter.
      * @param side side to which a pipe is connected.
      */
-    private void inputOrDrop(EntityRef item, Vector3i sorterPos, Side side) {
+    private void inputOrDrop(EntityRef item, Vector3ic sorterPos, Side side) {
         Map<Side, EntityRef> pipes = pipeSystem.findPipes(sorterPos);
         EntityRef pipe = pipes.get(side);
         if (pipe != null) {
