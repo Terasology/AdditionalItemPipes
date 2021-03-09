@@ -1,6 +1,6 @@
 package org.terasology.additionalitempipes.components;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

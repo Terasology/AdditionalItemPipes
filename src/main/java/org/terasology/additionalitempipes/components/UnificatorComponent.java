@@ -15,7 +15,7 @@
  */
 package org.terasology.additionalitempipes.components;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 public class UnificatorComponent implements Component {
 }
