@@ -28,7 +28,7 @@ public class SorterComponent implements Component<SorterComponent> {
     public int defaultSideNum = 0;
 
     @Override
-    public void copy(SorterComponent other) {
+    public void copyFrom(SorterComponent other) {
         this.filter = other.filter.stream()
                 .map(Lists::newArrayList)
                 .collect(Collectors.toList());
