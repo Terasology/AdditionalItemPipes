@@ -7,22 +7,23 @@ import org.joml.Vector3ic;
 import org.terasology.additionalitempipes.components.SorterComponent;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.lifespan.LifespanComponent;
-import org.terasology.module.inventory.components.InventoryComponent;
 import org.terasology.engine.logic.inventory.PickupComponent;
-import org.terasology.module.inventory.events.InventorySlotChangedEvent;
 import org.terasology.engine.math.Side;
 import org.terasology.engine.physics.components.RigidBodyComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.world.block.BlockComponent;
 import org.terasology.engine.world.block.items.BlockItemComponent;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.itempipes.controllers.PipeSystem;
 import org.terasology.itempipes.event.PipeInsertEvent;
+import org.terasology.module.inventory.components.InventoryComponent;
+import org.terasology.module.inventory.events.InventorySlotChangedEvent;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -48,7 +49,8 @@ public class SorterAction extends BaseComponentSystem {
      * @param sorter Sorter's SorterComponent.
      * @param block Sorter's BlockComponent.
      */
-    @ReceiveEvent(components = SorterComponent.class, priority = EventPriority.PRIORITY_HIGH)
+    @Priority(EventPriority.PRIORITY_HIGH)
+    @ReceiveEvent(components = SorterComponent.class)
     public void onItemInput(PipeInsertEvent event, EntityRef entity, SorterComponent sorter, BlockComponent block) {
         EntityRef item = event.getActor();
 

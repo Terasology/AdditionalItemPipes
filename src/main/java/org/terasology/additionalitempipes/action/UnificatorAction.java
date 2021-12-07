@@ -6,7 +6,7 @@ import org.joml.Vector3ic;
 import org.terasology.additionalitempipes.components.UnificatorComponent;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
@@ -21,6 +21,7 @@ import org.terasology.engine.world.WorldProvider;
 import org.terasology.engine.world.block.Block;
 import org.terasology.engine.world.block.BlockComponent;
 import org.terasology.engine.world.block.BlockManager;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.itempipes.controllers.PipeSystem;
 import org.terasology.itempipes.event.PipeInsertEvent;
 
@@ -83,7 +84,8 @@ public class UnificatorAction extends BaseComponentSystem {
         }
     }
 
-    @ReceiveEvent(components = UnificatorComponent.class, priority = EventPriority.PRIORITY_HIGH)
+    @Priority(EventPriority.PRIORITY_HIGH)
+    @ReceiveEvent(components = UnificatorComponent.class)
     public void onItemInput(PipeInsertEvent event, EntityRef entity, UnificatorComponent unificator, BlockComponent block) {
         EntityRef item = event.getActor();
         item.removeComponent(RigidBodyComponent.class);
